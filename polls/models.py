@@ -62,7 +62,8 @@ class Choice(models.Model):
 class Vote(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
-    choice = models.ForeignKey(Choice, on_delete=models.CASCADE)
+    choices = models.ManyToManyField(Choice)
 
     def __str__(self):
-        return f'{self.poll.text[:15]} - {self.choice.choice_text[:15]} - {self.user.username}'
+        choices = ";".join(map(lambda x: x.choice_text[:15], self.choices))
+        return f'{self.poll.text[:15]} - {choices} - {self.user.username}'
